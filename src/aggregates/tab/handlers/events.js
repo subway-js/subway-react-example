@@ -4,7 +4,10 @@ export const evtTabOpenedHandler = {
   command: Events.TAB_OPENED,
   handler: (aggregateState, payload) => {
     return {
-      proposal: { open: true }
+      proposal: {
+        ...aggregateState,
+        open: true
+      }
     };
   }
 };
