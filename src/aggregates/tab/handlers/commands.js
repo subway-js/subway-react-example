@@ -5,9 +5,7 @@ export const cmdOpenTabHandler = {
   command: Commands.OPEN_TAB,
   handler: (aggregateState, payload) => {
     return {
-      events: [
-        { id: Events.TAB_OPENED, payload: { id: 0, table: 1, waiter: 1 } }
-      ]
+      events: [{ id: Events.TAB_OPENED, payload }]
     };
   }
 };

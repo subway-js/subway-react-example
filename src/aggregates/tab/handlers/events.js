@@ -6,6 +6,12 @@ export const evtTabOpenedHandler = {
     return {
       proposal: {
         ...aggregateState,
+        tables: aggregateState.tables.map(t => {
+          if (t.id === payload.table) {
+            t.status = "open";
+          }
+          return t;
+        }),
         open: true
       }
     };

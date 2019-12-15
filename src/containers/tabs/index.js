@@ -25,7 +25,7 @@ const TabsContainer = () => {
     console.log("YAYY " + tableId);
     Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.OPEN_TAB, {
       id: 0,
-      table: 1,
+      table: tableId,
       waiter: 1
     });
   };
@@ -37,7 +37,7 @@ const TabsContainer = () => {
           <Card key={t.id} color="green">
             <Card.Content>
               <Card.Header>{t.label}</Card.Header>
-              <Card.Meta>AVAILABLE</Card.Meta>
+              <Card.Meta>{t.status}</Card.Meta>
               {/*<Card.Description>
                 Steve wants to add you to the group{" "}
                 <strong>best friends</strong>
@@ -45,13 +45,15 @@ const TabsContainer = () => {
             </Card.Content>
             <Card.Content extra>
               <div className="ui two buttons">
-                <Button
-                  basic
-                  color="green"
-                  onClick={() => simulateCustomers(t.id)}
-                >
-                  Simulate customers
-                </Button>
+                {t.status === "available" && (
+                  <Button
+                    basic
+                    color="green"
+                    onClick={() => simulateCustomers(t.id)}
+                  >
+                    Sit customers
+                  </Button>
+                )}
               </div>
             </Card.Content>
           </Card>
