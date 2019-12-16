@@ -1,12 +1,66 @@
 {
   "tables": [
     {
-      "id": "001",
+      "id": "T001",
       "label": "T1"
     },
     {
-      "id": "002",
+      "id": "T002",
       "label": "T2"
     }
-  ]
+  ],
+  "menu": {
+    "drinksMenu": [
+      {
+        "id": "D001",
+        "menuNumber": 101,
+        "label": "Still water bottle",
+        "price": 2
+      },
+      {
+        "id": "D002",
+        "menuNumber": 102,
+        "label": "Coke Zero bottle",
+        "price": 4
+      },
+      {
+        "id": "D003",
+        "menuNumber": 103,
+        "label": "White wine bottle",
+        "price": 7
+      },
+      {
+        "id": "D004",
+        "menuNumber": 104,
+        "label": "Red wine bottle",
+        "price": 7.5
+      }
+    ],
+    "foodMenu": [
+      {
+        "id": "F001",
+        "menuNumber": 201,
+        "label": "Hamburger & Chips",
+        "price": 9.9
+      },
+      {
+        "id": "F002",
+        "menuNumber": 202,
+        "label": "Chicken katsu curry",
+        "price": 9.9
+      },
+      {
+        "id": "F003",
+        "menuNumber": 203,
+        "label": "House pizza ",
+        "price": 10.5
+      },
+      {
+        "id": "F004",
+        "menuNumber": 204,
+        "label": "Cesar salad",
+        "price": 7.4
+      }
+    ]
+  }
 }

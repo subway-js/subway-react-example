@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Loader, Icon } from "semantic-ui-react";
 
+import { getRandomInt } from "../../randomUtils";
+
+import MenuForm from "../../components/menuForm";
 import { Aggregates } from "../../aggregates";
 import { Commands } from "../../aggregates/tab/constants";
 import { Subway } from "../../subwayRef";
@@ -22,10 +25,10 @@ const TabsContainer = () => {
   }, []);
 
   const simulateCustomers = tableId => {
-    console.log("YAYY " + tableId);
     Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.OPEN_TAB, {
       id: 0,
       table: tableId,
+      numberOfPeople: getRandomInt(2, 6),
       waiter: 1
     });
   };
@@ -37,15 +40,38 @@ const TabsContainer = () => {
           <Card key={t.id} color="green">
             <Card.Content>
               <Card.Header>{t.label}</Card.Header>
-              <Card.Meta>{t.status}</Card.Meta>
-              {/*<Card.Description>
-                Steve wants to add you to the group{" "}
-                <strong>best friends</strong>
-              </Card.Description>*/}
+              <Card.Meta>
+                {t.status === "available" ? (
+                  "This table is free"
+                ) : (
+                  <span>
+                    {Array(t.numberOfPeople)
+                      .fill(1)
+                      .map((v, k) => (
+                        <Icon key={k} color="green" name="user" />
+                      ))}
+                  </span>
+                )}
+              </Card.Meta>
+
+              <Card.Description>
+                {t.status === "open" /*<MenuForm />*/ && (
+                  <>
+                    <br />
+                    <br />
+                    <Loader active inline="centered" />
+                    <br />
+                  </>
+                )}
+              </Card.Description>
             </Card.Content>
+
             <Card.Content extra>
-              <div className="ui two buttons">
-                {t.status === "available" && (
+              {t.status === "open" && (
+                <p>Customers choosing food & drinks...</p>
+              )}
+              {t.status === "available" && (
+                <div className="ui two buttons">
                   <Button
                     basic
                     color="green"
@@ -53,8 +79,8 @@ const TabsContainer = () => {
                   >
                     Sit customers
                   </Button>
-                )}
-              </div>
+                </div>
+              )}
             </Card.Content>
           </Card>
         ))}

@@ -9,6 +9,7 @@ export const evtTabOpenedHandler = {
         tables: aggregateState.tables.map(t => {
           if (t.id === payload.table) {
             t.status = "open";
+            t.numberOfPeople = payload.numberOfPeople;
           }
           return t;
         }),
