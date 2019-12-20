@@ -14,25 +14,25 @@
       {
         "id": "D001",
         "menuNumber": 101,
-        "label": "Still water bottle",
+        "label": "Still water glass",
         "price": 2
       },
       {
         "id": "D002",
         "menuNumber": 102,
-        "label": "Coke Zero bottle",
+        "label": "Coke Zero glass",
         "price": 4
       },
       {
         "id": "D003",
         "menuNumber": 103,
-        "label": "White wine bottle",
+        "label": "White wine glass",
         "price": 7
       },
       {
         "id": "D004",
         "menuNumber": 104,
-        "label": "Red wine bottle",
+        "label": "Red wine glass",
         "price": 7.5
       }
     ],

@@ -13,13 +13,13 @@ export const cmdOpenTabHandler = {
 export const cmdPlaceOrderHandler = {
   command: Commands.PLACE_ORDER,
   handler: (aggregateState, payload) => {
-    if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
-    const drinkSample = payload.orderedItems.filter(i => i.isDrink);
-    const foodSample = payload.orderedItems.filter(i => !i.isDrink);
+    // TODO if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
+    const { tableId } = payload;
+    const { food, drinks } = payload.orderedItems;
     return {
       events: [
-        { id: Events.DRINKS_ORDERED, payload: drinkSample },
-        { id: Events.FOOD_ORDERED, payload: foodSample }
+        { id: Events.DRINKS_ORDERED, payload: { tableId, drinks } },
+        { id: Events.FOOD_ORDERED, payload: { tableId, food } }
       ]
     };
   }
@@ -28,13 +28,13 @@ export const cmdPlaceOrderHandler = {
 export const cmdMarkDrinkServedHandler = {
   command: Commands.MARK_DRINK_SERVED,
   handler: (aggregateState, payload) => {
-    if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
-    if (aggregateState.outstandingDrinks) {
-      // TODO check we ordered what we are trying to serve
-      // if( ... ) throw Error(Exceptions.DRINKS_NOT_OUTSTANDING)
-    } else {
-      throw Error(Exceptions.DRINKS_NOT_OUTSTANDING);
-    }
+    // if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
+    // if (aggregateState.outstandingDrinks) {
+    //   // TODO check we ordered what we are trying to serve
+    //   // if( ... ) throw Error(Exceptions.DRINKS_NOT_OUTSTANDING)
+    // } else {
+    //   throw Error(Exceptions.DRINKS_NOT_OUTSTANDING);
+    // }
     return {
       events: [{ id: Events.DRINK_SERVED, payload }]
     };
@@ -47,13 +47,13 @@ export const cmdMarkDrinkServedHandler = {
 export const cmdMarkFoodServedHandler = {
   command: Commands.MARK_FOOD_SERVED,
   handler: (aggregateState, payload) => {
-    if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
-    if (aggregateState.outstandingFood) {
-      // TODO check we ordered what we are trying to serve
-      // if( ... ) throw Error(EX.DRINKS_NOT_OUTSTANDING)
-    } else {
-      throw Error(Exceptions.FOOD_NOT_OUTSTANDING);
-    }
+    // if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
+    // if (aggregateState.outstandingFood) {
+    //   // TODO check we ordered what we are trying to serve
+    //   // if( ... ) throw Error(EX.DRINKS_NOT_OUTSTANDING)
+    // } else {
+    //   throw Error(Exceptions.FOOD_NOT_OUTSTANDING);
+    // }
     return {
       events: [{ id: Events.FOOD_SERVED, payload }]
     };
@@ -104,13 +104,13 @@ export const commmandHandlers = [
   {
     command: Commands.MARK_DRINK_SERVED,
     handler: (aggregateState, payload) => {
-      if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
-      if (aggregateState.outstandingDrinks) {
-        // TODO check we ordered what we are trying to serve
-        // if( ... ) throw Error(Exceptions.DRINKS_NOT_OUTSTANDING)
-      } else {
-        throw Error(Exceptions.DRINKS_NOT_OUTSTANDING);
-      }
+      // if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
+      // if (aggregateState.outstandingDrinks) {
+      //   // TODO check we ordered what we are trying to serve
+      //   // if( ... ) throw Error(Exceptions.DRINKS_NOT_OUTSTANDING)
+      // } else {
+      //   throw Error(Exceptions.DRINKS_NOT_OUTSTANDING);
+      // }
       return {
         events: [{ id: Events.DRINK_SERVED, payload }]
       };
@@ -122,13 +122,13 @@ export const commmandHandlers = [
   {
     command: Commands.MARK_FOOD_SERVED,
     handler: (aggregateState, payload) => {
-      if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
-      if (aggregateState.outstandingFood) {
-        // TODO check we ordered what we are trying to serve
-        // if( ... ) throw Error(EX.DRINKS_NOT_OUTSTANDING)
-      } else {
-        throw Error(Exceptions.FOOD_NOT_OUTSTANDING);
-      }
+      // if (!aggregateState.open) throw Error(Exceptions.TAB_NOT_OPEN);
+      // if (aggregateState.outstandingFood) {
+      //   // TODO check we ordered what we are trying to serve
+      //   // if( ... ) throw Error(EX.DRINKS_NOT_OUTSTANDING)
+      // } else {
+      //   throw Error(Exceptions.FOOD_NOT_OUTSTANDING);
+      // }
       return {
         events: [{ id: Events.FOOD_SERVED, payload }]
       };

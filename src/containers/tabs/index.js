@@ -1,36 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Loader, Icon } from "semantic-ui-react";
-
+import { Card, Button, Loader, Icon, List } from "semantic-ui-react";
 import { getRandomInt } from "../../randomUtils";
+import {
+  getRandomOrder,
+  getRandomNumberOfCustomers
+} from "../../sampleDataUtils";
 
 import MenuForm from "../../components/menuForm";
 import { Aggregates } from "../../aggregates";
-import { Commands } from "../../aggregates/tab/constants";
+import { Commands, Events } from "../../aggregates/tab/constants";
 import { Subway } from "../../subwayRef";
+
+import * as TabAggregate from "../../aggregates/tab/commands";
 
 const TabsContainer = () => {
   const [tables, setTables] = useState(null);
 
   useEffect(() => {
-    const { currentState } = Subway.selectAggregate(
-      Aggregates.TAB
-    ).observeState({
+    const tabAggregate = Subway.selectAggregate(Aggregates.TAB);
+    const { currentState } = tabAggregate.observeState({
       next: ({ nextState }) => {
         console.log(nextState);
         setTables(nextState.tables);
+        simulateOrders(nextState.tables);
       }
     });
     console.log(currentState);
     setTables(currentState.tables);
+    simulateKitchenAndWaiter(tabAggregate);
   }, []);
 
-  const simulateCustomers = tableId => {
-    Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.OPEN_TAB, {
-      id: 0,
-      table: tableId,
-      numberOfPeople: getRandomInt(2, 6),
-      waiter: 1
+  const simulateKitchenAndWaiter = aggregate => {
+    aggregate.spy(Events.DRINKS_ORDERED, {
+      next: ({ tableId, drinks }) => {
+        // drinks.forEach(d => {
+        setTimeout(() => {
+          console.log(drinks);
+          TabAggregate.serveDrinks(tableId, drinks);
+        }, getRandomInt(1500, 2000));
+        // });
+      }
     });
+    aggregate.spy(Events.FOOD_ORDERED, {
+      next: ({ tableId, food }) => {
+        // food.forEach(f => {
+        setTimeout(() => {
+          console.log(food);
+          TabAggregate.serveFood(tableId, food);
+        }, getRandomInt(1500, 2000));
+        // });
+      }
+    });
+  };
+  const simulateOrders = tables => {
+    tables.forEach(t => {
+      if (t.status === "open") {
+        setTimeout(() => {
+          TabAggregate.placeOrder(t.id, getRandomOrder(t.numberOfPeople));
+        }, 1000);
+      }
+    });
+  };
+  const simulateCustomers = tableId => {
+    TabAggregate.openTab(tableId, getRandomNumberOfCustomers(), 1);
   };
 
   return (
@@ -63,6 +95,38 @@ const TabsContainer = () => {
                     <br />
                   </>
                 )}
+                {t.status === "waitingOrder" && (
+                  <>
+                    <List>
+                      <List.Item content="Drinks:" />
+                      {t.outstandingDrinks &&
+                        t.outstandingDrinks.map((d, i) => (
+                          <List.Item
+                            key={`${t.id}_${i}_${d.menuNumber}`}
+                            icon="loading spinner"
+                            content={d.label}
+                          />
+                        ))}
+                      <List.Item content="Food:" />
+                      {t.outstandingFood &&
+                        t.outstandingFood.map((f, i) => (
+                          <List.Item
+                            key={`${t.id}_${i}_${f.menuNumber}`}
+                            icon="loading spinner"
+                            content={f.label}
+                          />
+                        ))}
+                    </List>
+                  </>
+                )}
+                {t.status === "readyToPay" /*<MenuForm />*/ && (
+                  <>
+                    <br />
+                    <br />
+                    Bill: {t.servedItemsValue} €
+                    <br />
+                  </>
+                )}
               </Card.Description>
             </Card.Content>
 
@@ -78,6 +142,16 @@ const TabsContainer = () => {
                     onClick={() => simulateCustomers(t.id)}
                   >
                     Sit customers
+                  </Button>
+                </div>
+              )}
+              {t.status === "waitingOrder" && (
+                <p>Staff working on the orders...</p>
+              )}
+              {t.status === "readyToPay" && (
+                <div className="ui two buttons">
+                  <Button basic color="green" onClick={() => {}}>
+                    Pay with tip
                   </Button>
                 </div>
               )}

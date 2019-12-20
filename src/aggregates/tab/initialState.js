@@ -1,7 +1,7 @@
-import sampleData from "../../sampleData";
+import { getTablesInitialState } from "../../sampleDataUtils";
 
 export const tabInitialState = {
   open: false,
-  tables: sampleData.tables.map(t => ({ ...t, status: "available" })),
+  tables: getTablesInitialState(),
   servedItemsValue: 0
 };

@@ -21,11 +21,17 @@ export const evtTabOpenedHandler = {
 
 export const evtDrinksOrderedHandler = {
   command: Events.DRINKS_ORDERED,
-  handler: (aggregateState, payload) => {
+  handler: (aggregateState, { tableId, drinks }) => {
     return {
       proposal: {
         ...aggregateState, // TODO no, only partial
-        outstandingDrinks: payload
+        tables: aggregateState.tables.map(t => {
+          if (t.id === tableId) {
+            t.status = "waitingOrder";
+            t.outstandingDrinks = drinks;
+          }
+          return t;
+        })
       }
     };
   }
@@ -33,11 +39,17 @@ export const evtDrinksOrderedHandler = {
 
 export const evtFoodOrderedHandler = {
   command: Events.FOOD_ORDERED,
-  handler: (aggregateState, payload) => {
+  handler: (aggregateState, { tableId, food }) => {
     return {
       proposal: {
         ...aggregateState, // TODO no, only partial
-        outstandingFood: payload
+        tables: aggregateState.tables.map(t => {
+          if (t.id === tableId) {
+            t.status = "waitingOrder";
+            t.outstandingFood = food;
+          }
+          return t;
+        })
       }
     };
   }
@@ -45,42 +57,75 @@ export const evtFoodOrderedHandler = {
 
 export const evtDrinkServeddHandler = {
   command: Events.DRINK_SERVED,
-  handler: (aggregateState, payload) => {
-    const nextOutstandingDrinks = aggregateState.outstandingDrinks.filter(
-      drink => !payload.menuNumbers.includes(drink.menuNumber)
+  handler: (aggregateState, { servedItems, tableId }) => {
+    const table = aggregateState.tables.filter(t => t.id === tableId)[0];
+    const drinkMenuNumbers = servedItems.map(i => i.menuNumber);
+    const nextOutstandingDrinks = table.outstandingDrinks.filter(
+      drink => !drinkMenuNumbers.includes(drink.menuNumber)
     );
-    const temp = aggregateState.outstandingDrinks.filter(drink =>
-      payload.menuNumbers.includes(drink.menuNumber)
+    const temp = table.outstandingDrinks.filter(drink =>
+      drinkMenuNumbers.includes(drink.menuNumber)
     );
     const servedItemsValue = temp.reduce((acc, curr) => acc + curr.price, 0);
-    return {
+    const returnValue = {
       proposal: {
-        ...aggregateState, // TODO no, only partial, mutate!
-        servedItemsValue:
-          (aggregateState.servedItemsValue || 0) + servedItemsValue,
-        outstandingDrinks: nextOutstandingDrinks
+        ...aggregateState,
+        tables: aggregateState.tables.map(t => {
+          if (t.id === tableId) {
+            let nextTable = { ...table };
+            nextTable.outstandingDrinks = nextOutstandingDrinks;
+            if (
+              nextTable.outstandingFood.length === 0 &&
+              nextTable.outstandingDrinks.length === 0
+            ) {
+              nextTable.status = "readyToPay";
+            }
+            nextTable.servedItemsValue =
+              (nextTable.servedItemsValue || 0) + servedItemsValue;
+            return nextTable;
+          }
+          return t;
+        })
       }
     };
+    return returnValue;
   }
 };
 
 export const evtFoodServedHandler = {
   command: Events.FOOD_SERVED,
-  handler: (aggregateState, payload) => {
-    const nextOutstandingFood = aggregateState.outstandingFood.filter(
-      food => !payload.menuNumbers.includes(food.menuNumber)
+  handler: (aggregateState, { servedItems, tableId }) => {
+    const table = aggregateState.tables.filter(t => t.id === tableId)[0];
+    const foodMenuNumbers = servedItems.map(i => i.menuNumber);
+
+    const nextOutstandingFood = table.outstandingFood.filter(
+      food => !foodMenuNumbers.includes(food.menuNumber)
     );
-    const temp = aggregateState.outstandingFood.filter(food =>
-      payload.menuNumbers.includes(food.menuNumber)
+    const temp = table.outstandingFood.filter(food =>
+      foodMenuNumbers.includes(food.menuNumber)
     );
     const servedItemsValue = temp.reduce((acc, curr) => acc + curr.price, 0);
-    return {
+    const returnValue = {
       proposal: {
         ...aggregateState,
-        servedItemsValue:
-          (aggregateState.servedItemsValue || 0) + servedItemsValue,
-        outstandingFood: nextOutstandingFood
+        tables: aggregateState.tables.map(t => {
+          if (t.id === tableId) {
+            let nextTable = { ...table };
+            nextTable.outstandingFood = nextOutstandingFood;
+            if (
+              nextTable.outstandingFood.length === 0 &&
+              nextTable.outstandingDrinks.length === 0
+            ) {
+              nextTable.status = "readyToPay";
+            }
+            nextTable.servedItemsValue =
+              (nextTable.servedItemsValue || 0) + servedItemsValue;
+            return nextTable;
+          }
+          return t;
+        })
       }
     };
+    return returnValue;
   }
 };
