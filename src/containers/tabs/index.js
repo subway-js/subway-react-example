@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Loader, Icon, List, Statistic } from "semantic-ui-react";
+import {
+  Card,
+  Button,
+  Loader,
+  Icon,
+  List,
+  Statistic,
+  Grid
+} from "semantic-ui-react";
 import { getRandomInt } from "../../randomUtils";
 import {
   getRandomOrder,
@@ -110,30 +118,41 @@ const TabsContainer = () => {
                   </>
                 )}
                 {t.status === "waitingOrder" && (
-                  <List>
-                    {t.outstandingDrinks && t.outstandingDrinks.length > 0 && (
-                      <List.Item>
-                        <List.Header>Drinks:</List.Header>
-                      </List.Item>
-                    )}
-                    {t.outstandingDrinks &&
-                      t.outstandingDrinks.map((d, i) => (
-                        <List.Item key={`${t.id}_${i}_${d.menuNumber}`}>
-                          <Icon loading name="spinner" /> {d.label}
-                        </List.Item>
-                      ))}
-                    {t.outstandingFood && t.outstandingFood.length > 0 && (
-                      <List.Item>
-                        <List.Header>Food:</List.Header>
-                      </List.Item>
-                    )}
-                    {t.outstandingFood &&
-                      t.outstandingFood.map((f, i) => (
-                        <List.Item key={`${t.id}_${i}_${f.menuNumber}`}>
-                          <Icon loading name="spinner" /> {f.label}
-                        </List.Item>
-                      ))}
-                  </List>
+                  <Grid divided="vertically">
+                    <Grid.Row columns={2}>
+                      <Grid.Column>
+                        <List>
+                          {t.outstandingDrinks &&
+                            t.outstandingDrinks.length > 0 && (
+                              <List.Item>
+                                <List.Header>Drinks:</List.Header>
+                              </List.Item>
+                            )}
+                          {t.outstandingDrinks &&
+                            t.outstandingDrinks.map((d, i) => (
+                              <List.Item key={`${t.id}_${i}_${d.menuNumber}`}>
+                                <Icon loading name="spinner" /> {d.label}
+                              </List.Item>
+                            ))}
+                        </List>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <List>
+                          {t.outstandingFood && t.outstandingFood.length > 0 && (
+                            <List.Item>
+                              <List.Header>Food:</List.Header>
+                            </List.Item>
+                          )}
+                          {t.outstandingFood &&
+                            t.outstandingFood.map((f, i) => (
+                              <List.Item key={`${t.id}_${i}_${f.menuNumber}`}>
+                                <Icon loading name="spinner" /> {f.label}
+                              </List.Item>
+                            ))}
+                        </List>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
                 )}
                 {t.status === "readyToPay" && (
                   <div className="ui center aligned">
@@ -173,7 +192,7 @@ const TabsContainer = () => {
               )}
               {t.status === "readyToPay" && (
                 <div className="ui two buttons">
-                  <Button basic color="green" onClick={() => payWithTip(t)}>
+                  <Button color="green" onClick={() => payWithTip(t)}>
                     Pay & free table
                   </Button>
                 </div>
