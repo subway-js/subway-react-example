@@ -79,7 +79,7 @@ const TabsContainer = () => {
     <Card.Group itemsPerRow={2}>
       {tables &&
         tables.map(t => (
-          <Card key={t.id} color="green">
+          <Card key={t.id} color="green" style={{ minHeight: 250 }}>
             <Card.Content>
               <Card.Header>{t.label}</Card.Header>
               <Card.Meta>
@@ -100,7 +100,6 @@ const TabsContainer = () => {
                 {t.status === "available" && (
                   <div className="ui center aligned">
                     <br />
-                    <br />
                     <Statistic color="grey" size="mini">
                       <Statistic.Value>
                         <Icon name="food" />
@@ -112,7 +111,6 @@ const TabsContainer = () => {
                 {t.status === "open" && (
                   <>
                     <br />
-                    <br />
                     <Loader active inline="centered" />
                     <br />
                   </>
@@ -121,7 +119,7 @@ const TabsContainer = () => {
                   <Grid divided="vertically">
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <List>
+                        <List size="mini">
                           {t.outstandingDrinks &&
                             t.outstandingDrinks.length > 0 && (
                               <List.Item>
@@ -137,7 +135,7 @@ const TabsContainer = () => {
                         </List>
                       </Grid.Column>
                       <Grid.Column>
-                        <List>
+                        <List size="mini">
                           {t.outstandingFood && t.outstandingFood.length > 0 && (
                             <List.Item>
                               <List.Header>Food:</List.Header>
@@ -156,7 +154,6 @@ const TabsContainer = () => {
                 )}
                 {t.status === "readyToPay" && (
                   <div className="ui center aligned">
-                    <br />
                     <br />
                     <Statistic color="green" size="tiny">
                       <Statistic.Label>
@@ -188,7 +185,7 @@ const TabsContainer = () => {
                 </div>
               )}
               {t.status === "waitingOrder" && (
-                <p>Staff working on the orders...</p>
+                <p>Cooking and delivering orders...</p>
               )}
               {t.status === "readyToPay" && (
                 <div className="ui two buttons">
