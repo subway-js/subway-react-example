@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Loader, Icon, List } from "semantic-ui-react";
+import { Card, Button, Loader, Icon, List, Statistic } from "semantic-ui-react";
 import { getRandomInt } from "../../randomUtils";
 import {
   getRandomOrder,
@@ -33,22 +33,22 @@ const TabsContainer = () => {
   const simulateKitchenAndWaiter = aggregate => {
     aggregate.spy(Events.DRINKS_ORDERED, {
       next: ({ tableId, drinks }) => {
-        // drinks.forEach(d => {
-        setTimeout(() => {
-          console.log(drinks);
-          TabAggregate.serveDrinks(tableId, drinks);
-        }, getRandomInt(1500, 2000));
-        // });
+        drinks.forEach(d => {
+          setTimeout(() => {
+            console.log(d);
+            TabAggregate.serveDrinks(tableId, [d]);
+          }, getRandomInt(200, 4000));
+        });
       }
     });
     aggregate.spy(Events.FOOD_ORDERED, {
       next: ({ tableId, food }) => {
-        // food.forEach(f => {
-        setTimeout(() => {
-          console.log(food);
-          TabAggregate.serveFood(tableId, food);
-        }, getRandomInt(1500, 2000));
-        // });
+        food.forEach(f => {
+          setTimeout(() => {
+            console.log(f);
+            TabAggregate.serveFood(tableId, [f]);
+          }, getRandomInt(2000, 4000));
+        });
       }
     });
   };
@@ -65,6 +65,12 @@ const TabsContainer = () => {
     TabAggregate.openTab(tableId, getRandomNumberOfCustomers(), 1);
   };
 
+  const payWithTip = table => {
+    console.log(
+      table.servedItemsValue.toFixed(2),
+      (table.servedItemsValue * 1.12).toFixed(2)
+    );
+  };
   return (
     <Card.Group itemsPerRow={2}>
       {tables &&
@@ -96,36 +102,50 @@ const TabsContainer = () => {
                   </>
                 )}
                 {t.status === "waitingOrder" && (
-                  <>
-                    <List>
-                      <List.Item content="Drinks:" />
-                      {t.outstandingDrinks &&
-                        t.outstandingDrinks.map((d, i) => (
-                          <List.Item
-                            key={`${t.id}_${i}_${d.menuNumber}`}
-                            icon="loading spinner"
-                            content={d.label}
-                          />
-                        ))}
-                      <List.Item content="Food:" />
-                      {t.outstandingFood &&
-                        t.outstandingFood.map((f, i) => (
-                          <List.Item
-                            key={`${t.id}_${i}_${f.menuNumber}`}
-                            icon="loading spinner"
-                            content={f.label}
-                          />
-                        ))}
-                    </List>
-                  </>
+                  <List>
+                    {t.outstandingDrinks && t.outstandingDrinks.length > 0 && (
+                      <List.Item>
+                        <List.Header>Drinks:</List.Header>
+                      </List.Item>
+                    )}
+                    {t.outstandingDrinks &&
+                      t.outstandingDrinks.map((d, i) => (
+                        <List.Item
+                          key={`${t.id}_${i}_${d.menuNumber}`}
+                          icon="loading spinner"
+                          content={d.label}
+                        />
+                      ))}
+                    {t.outstandingFood && t.outstandingFood.length > 0 && (
+                      <List.Item>
+                        <List.Header>Food:</List.Header>
+                      </List.Item>
+                    )}
+                    {t.outstandingFood &&
+                      t.outstandingFood.map((f, i) => (
+                        <List.Item
+                          key={`${t.id}_${i}_${f.menuNumber}`}
+                          icon="loading spinner"
+                          content={f.label}
+                        />
+                      ))}
+                  </List>
                 )}
                 {t.status === "readyToPay" /*<MenuForm />*/ && (
-                  <>
+                  <div className="ui center aligned">
                     <br />
                     <br />
-                    Bill: {t.servedItemsValue} €
+                    <Statistic color="green" size="tiny">
+                      <Statistic.Label>
+                        {t.servedItemsValue.toFixed(2)} € + 12% tip
+                      </Statistic.Label>
+                      <Statistic.Label>=</Statistic.Label>
+                      <Statistic.Value>
+                        {(t.servedItemsValue * 1.12).toFixed(2)} €
+                      </Statistic.Value>
+                    </Statistic>
                     <br />
-                  </>
+                  </div>
                 )}
               </Card.Description>
             </Card.Content>
@@ -150,8 +170,8 @@ const TabsContainer = () => {
               )}
               {t.status === "readyToPay" && (
                 <div className="ui two buttons">
-                  <Button basic color="green" onClick={() => {}}>
-                    Pay with tip
+                  <Button basic color="green" onClick={() => payWithTip(t)}>
+                    Pay & free table
                   </Button>
                 </div>
               )}
