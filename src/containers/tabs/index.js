@@ -6,9 +6,8 @@ import {
   getRandomNumberOfCustomers
 } from "../../sampleDataUtils";
 
-import MenuForm from "../../components/menuForm";
 import { Aggregates } from "../../aggregates";
-import { Commands, Events } from "../../aggregates/tab/constants";
+import { Events } from "../../aggregates/tab/constants";
 import { Subway } from "../../subwayRef";
 
 import * as TabAggregate from "../../aggregates/tab/commands";
@@ -66,10 +65,7 @@ const TabsContainer = () => {
   };
 
   const payWithTip = table => {
-    console.log(
-      table.servedItemsValue.toFixed(2),
-      (table.servedItemsValue * 1.12).toFixed(2)
-    );
+    TabAggregate.payAndFreeTable(table);
   };
   return (
     <Card.Group itemsPerRow={2}>
@@ -93,7 +89,7 @@ const TabsContainer = () => {
               </Card.Meta>
 
               <Card.Description>
-                {t.status === "open" /*<MenuForm />*/ && (
+                {t.status === "open" && (
                   <>
                     <br />
                     <br />
@@ -131,18 +127,17 @@ const TabsContainer = () => {
                       ))}
                   </List>
                 )}
-                {t.status === "readyToPay" /*<MenuForm />*/ && (
+                {t.status === "readyToPay" && (
                   <div className="ui center aligned">
                     <br />
                     <br />
                     <Statistic color="green" size="tiny">
                       <Statistic.Label>
-                        {t.servedItemsValue.toFixed(2)} € + 12% tip
+                        {t.servedItemsValue.toFixed(2)} € + {t.tipPercentage}%
+                        tip
                       </Statistic.Label>
                       <Statistic.Label>=</Statistic.Label>
-                      <Statistic.Value>
-                        {(t.servedItemsValue * 1.12).toFixed(2)} €
-                      </Statistic.Value>
+                      <Statistic.Value>{t.bill.toFixed(2)} €</Statistic.Value>
                     </Statistic>
                     <br />
                   </div>

@@ -19,7 +19,8 @@ import {
   evtDrinksOrderedHandler,
   evtFoodOrderedHandler,
   evtDrinkServeddHandler,
-  evtFoodServedHandler
+  evtFoodServedHandler,
+  evtTabClosedHandler
 } from "./aggregates/tab/handlers/events";
 
 const tabAggregate = Subway.createAggregate(Aggregates.TAB, InitialStates.TAB);
@@ -41,6 +42,7 @@ tabAggregate.setEventHandler(...Object.values(evtDrinksOrderedHandler));
 tabAggregate.setEventHandler(...Object.values(evtFoodOrderedHandler));
 tabAggregate.setEventHandler(...Object.values(evtDrinkServeddHandler));
 tabAggregate.setEventHandler(...Object.values(evtFoodServedHandler));
+tabAggregate.setEventHandler(...Object.values(evtTabClosedHandler));
 
 ReactDOM.render(<App />, document.getElementById("root"));
 

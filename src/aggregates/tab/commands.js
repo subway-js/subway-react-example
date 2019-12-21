@@ -42,3 +42,10 @@ export const serveDrinks = (tableId, drinks) => {
     }
   );
 };
+
+export const payAndFreeTable = table => {
+  Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.CLOSE_TAB, {
+    id: 0,
+    table
+  });
+};

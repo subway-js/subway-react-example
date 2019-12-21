@@ -10,10 +10,10 @@ export const evtTabOpenedHandler = {
           if (t.id === payload.table) {
             t.status = "open";
             t.numberOfPeople = payload.numberOfPeople;
+            t.waiter = payload.waiter;
           }
           return t;
-        }),
-        open: true
+        })
       }
     };
   }
@@ -74,14 +74,19 @@ export const evtDrinkServeddHandler = {
           if (t.id === tableId) {
             let nextTable = { ...table };
             nextTable.outstandingDrinks = nextOutstandingDrinks;
+            nextTable.servedItemsValue =
+              (nextTable.servedItemsValue || 0) + servedItemsValue;
             if (
               nextTable.outstandingFood.length === 0 &&
               nextTable.outstandingDrinks.length === 0
             ) {
               nextTable.status = "readyToPay";
+              nextTable.tipPercentage = 12;
+              nextTable.tip =
+                nextTable.servedItemsValue * (nextTable.tipPercentage / 100);
+              nextTable.bill = nextTable.servedItemsValue + nextTable.tip;
             }
-            nextTable.servedItemsValue =
-              (nextTable.servedItemsValue || 0) + servedItemsValue;
+
             return nextTable;
           }
           return t;
@@ -112,14 +117,19 @@ export const evtFoodServedHandler = {
           if (t.id === tableId) {
             let nextTable = { ...table };
             nextTable.outstandingFood = nextOutstandingFood;
+            nextTable.servedItemsValue =
+              (nextTable.servedItemsValue || 0) + servedItemsValue;
             if (
               nextTable.outstandingFood.length === 0 &&
               nextTable.outstandingDrinks.length === 0
             ) {
               nextTable.status = "readyToPay";
+              nextTable.tipPercentage = 12;
+              nextTable.tip =
+                nextTable.servedItemsValue * (nextTable.tipPercentage / 100);
+              nextTable.bill = nextTable.servedItemsValue + nextTable.tip;
             }
-            nextTable.servedItemsValue =
-              (nextTable.servedItemsValue || 0) + servedItemsValue;
+
             return nextTable;
           }
           return t;
@@ -127,5 +137,27 @@ export const evtFoodServedHandler = {
       }
     };
     return returnValue;
+  }
+};
+
+export const evtTabClosedHandler = {
+  command: Events.TAB_CLOSED,
+  handler: (aggregateState, { tableId }) => {
+    return {
+      proposal: {
+        ...aggregateState,
+        tables: aggregateState.tables.map(t => {
+          if (t.id === tableId) {
+            const emptyTable = {
+              id: tableId,
+              label: t.label,
+              status: "available"
+            };
+            return emptyTable;
+          }
+          return t;
+        })
+      }
+    };
   }
 };
