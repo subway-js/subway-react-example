@@ -89,6 +89,18 @@ const TabsContainer = () => {
               </Card.Meta>
 
               <Card.Description>
+                {t.status === "available" && (
+                  <div className="ui center aligned">
+                    <br />
+                    <br />
+                    <Statistic color="grey" size="mini">
+                      <Statistic.Value>
+                        <Icon name="food" />
+                      </Statistic.Value>
+                    </Statistic>
+                    <br />
+                  </div>
+                )}
                 {t.status === "open" && (
                   <>
                     <br />
