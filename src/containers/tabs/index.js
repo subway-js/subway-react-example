@@ -118,11 +118,9 @@ const TabsContainer = () => {
                     )}
                     {t.outstandingDrinks &&
                       t.outstandingDrinks.map((d, i) => (
-                        <List.Item
-                          key={`${t.id}_${i}_${d.menuNumber}`}
-                          icon="loading spinner"
-                          content={d.label}
-                        />
+                        <List.Item key={`${t.id}_${i}_${d.menuNumber}`}>
+                          <Icon loading name="spinner" /> {d.label}
+                        </List.Item>
                       ))}
                     {t.outstandingFood && t.outstandingFood.length > 0 && (
                       <List.Item>
@@ -131,11 +129,9 @@ const TabsContainer = () => {
                     )}
                     {t.outstandingFood &&
                       t.outstandingFood.map((f, i) => (
-                        <List.Item
-                          key={`${t.id}_${i}_${f.menuNumber}`}
-                          icon="loading spinner"
-                          content={f.label}
-                        />
+                        <List.Item key={`${t.id}_${i}_${f.menuNumber}`}>
+                          <Icon loading name="spinner" /> {f.label}
+                        </List.Item>
                       ))}
                   </List>
                 )}
