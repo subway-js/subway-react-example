@@ -4,6 +4,7 @@ import {
   Button,
   Loader,
   Icon,
+  Label,
   List,
   Statistic,
   Grid
@@ -14,8 +15,10 @@ import {
   getRandomNumberOfCustomers
 } from "../../sampleDataUtils";
 
-import { Aggregates } from "../../aggregates";
-import { Events } from "../../aggregates/tab/constants";
+import { Table } from "../../aggregates/tab";
+
+import { AGGREGATE_NAME as TAB_AGGREGATE_NAME } from "../../aggregates/tab";
+import { Events } from "../../aggregates/tab/verbs/events";
 import { Subway } from "../../subwayRef";
 
 import * as TabAggregate from "../../aggregates/tab/commands";
@@ -24,7 +27,7 @@ const TabsContainer = () => {
   const [tables, setTables] = useState(null);
 
   useEffect(() => {
-    const tabAggregate = Subway.selectAggregate(Aggregates.TAB);
+    const tabAggregate = Subway.selectAggregate(TAB_AGGREGATE_NAME);
     const { currentState } = tabAggregate.observeState({
       next: ({ nextState }) => {
         console.log(nextState);
@@ -75,13 +78,17 @@ const TabsContainer = () => {
   const payWithTip = table => {
     TabAggregate.payAndFreeTable(table);
   };
+
   return (
     <Card.Group itemsPerRow={2}>
+      {tables && tables.map(t => <Table data={t} />)}
       {tables &&
         tables.map(t => (
           <Card key={t.id} color="green" style={{ minHeight: 250 }}>
             <Card.Content>
-              <Card.Header>{t.label}</Card.Header>
+              <Label as="a" color="green" ribbon>
+                {t.label}
+              </Label>
               <Card.Meta>
                 {t.status === "available" ? (
                   "This table is free"

@@ -1,11 +1,11 @@
-import { Aggregates } from "../../aggregates";
-import { Commands } from "../../aggregates/tab/constants";
-import { Subway } from "../../subwayRef";
+import { AGGREGATE_NAME } from "../index";
+import { Commands } from "../verbs/commands";
+import { Subway } from "../../../subwayRef";
 
-// const tabAggregate = Subway.selectAggregate(Aggregates.TAB);
+// const tabAggregate = Subway.selectAggregate(AGGREGATE_NAME);
 
 export const openTab = (tableId, numberOfPeople, waiterId) => {
-  Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.OPEN_TAB, {
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.OPEN_TAB, {
     id: 0,
     table: tableId,
     numberOfPeople: numberOfPeople,
@@ -14,7 +14,7 @@ export const openTab = (tableId, numberOfPeople, waiterId) => {
 };
 
 export const placeOrder = (tableId, orderedItems) => {
-  Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.PLACE_ORDER, {
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.PLACE_ORDER, {
     id: 0,
     tableId: tableId,
     orderedItems: orderedItems
@@ -22,7 +22,7 @@ export const placeOrder = (tableId, orderedItems) => {
 };
 
 export const serveFood = (tableId, food) => {
-  Subway.selectAggregate(Aggregates.TAB).sendCommand(
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(
     Commands.MARK_FOOD_SERVED,
     {
       id: 0,
@@ -33,7 +33,7 @@ export const serveFood = (tableId, food) => {
 };
 
 export const serveDrinks = (tableId, drinks) => {
-  Subway.selectAggregate(Aggregates.TAB).sendCommand(
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(
     Commands.MARK_DRINK_SERVED,
     {
       id: 0,
@@ -44,7 +44,7 @@ export const serveDrinks = (tableId, drinks) => {
 };
 
 export const payAndFreeTable = table => {
-  Subway.selectAggregate(Aggregates.TAB).sendCommand(Commands.CLOSE_TAB, {
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.CLOSE_TAB, {
     id: 0,
     table
   });

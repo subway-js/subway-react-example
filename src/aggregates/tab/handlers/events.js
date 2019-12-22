@@ -1,4 +1,5 @@
-import { Events, Exceptions } from "../constants";
+import { Events } from "../verbs/events";
+import { Exceptions } from "../verbs/exceptions";
 
 export const evtTabOpenedHandler = {
   command: Events.TAB_OPENED,
@@ -60,12 +61,16 @@ export const evtDrinkServeddHandler = {
   handler: (aggregateState, { servedItems, tableId }) => {
     const table = aggregateState.tables.filter(t => t.id === tableId)[0];
     const drinkMenuNumbers = servedItems.map(i => i.menuNumber);
-    const nextOutstandingDrinks = table.outstandingDrinks.filter(
-      drink => !drinkMenuNumbers.includes(drink.menuNumber)
-    );
-    const temp = table.outstandingDrinks.filter(drink =>
-      drinkMenuNumbers.includes(drink.menuNumber)
-    );
+    const nextOutstandingDrinks = table.outstandingDrinks
+      ? table.outstandingDrinks.filter(
+          drink => !drinkMenuNumbers.includes(drink.menuNumber)
+        )
+      : [];
+    const temp = table.outstandingDrinks
+      ? table.outstandingDrinks.filter(drink =>
+          drinkMenuNumbers.includes(drink.menuNumber)
+        )
+      : [];
     const servedItemsValue = temp.reduce((acc, curr) => acc + curr.price, 0);
     const returnValue = {
       proposal: {
@@ -103,12 +108,16 @@ export const evtFoodServedHandler = {
     const table = aggregateState.tables.filter(t => t.id === tableId)[0];
     const foodMenuNumbers = servedItems.map(i => i.menuNumber);
 
-    const nextOutstandingFood = table.outstandingFood.filter(
-      food => !foodMenuNumbers.includes(food.menuNumber)
-    );
-    const temp = table.outstandingFood.filter(food =>
-      foodMenuNumbers.includes(food.menuNumber)
-    );
+    const nextOutstandingFood = table.outstandingFood
+      ? table.outstandingFood.filter(
+          food => !foodMenuNumbers.includes(food.menuNumber)
+        )
+      : [];
+    const temp = table.outstandingFood
+      ? table.outstandingFood.filter(food =>
+          foodMenuNumbers.includes(food.menuNumber)
+        )
+      : [];
     const servedItemsValue = temp.reduce((acc, curr) => acc + curr.price, 0);
     const returnValue = {
       proposal: {

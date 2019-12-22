@@ -1,5 +1,6 @@
-// import { Aggregates } from "../../../aggregates";
-import { Commands, Events, Exceptions } from "../constants";
+import { Commands } from "../verbs/commands";
+import { Events } from "../verbs/events";
+import { Exceptions } from "../verbs/exceptions";
 
 export const cmdOpenTabHandler = {
   command: Commands.OPEN_TAB,

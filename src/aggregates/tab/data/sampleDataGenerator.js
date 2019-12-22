@@ -1,8 +1,10 @@
-import { tables, menu } from "./sampleData";
-import { getRandomInt } from "./randomUtils";
+import { menu } from "./data";
 
-export const getTablesInitialState = () =>
-  tables.map(t => ({ ...t, status: "available" }));
+export const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 export const getRandomNumberOfCustomers = () => getRandomInt(2, 6);
 

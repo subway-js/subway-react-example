@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Subway } from "./subwayRef"; // TODO create react helper
-import { Aggregates, InitialStates } from "./aggregates";
+import {
+  AGGREGATE_NAME as TabAggregateName,
+  initialState as tabInitialState
+} from "./aggregates/tab";
 
 import {
   cmdOpenTabHandler,
@@ -23,7 +25,7 @@ import {
   evtTabClosedHandler
 } from "./aggregates/tab/handlers/events";
 
-const tabAggregate = Subway.createAggregate(Aggregates.TAB, InitialStates.TAB);
+const tabAggregate = Subway.createAggregate(TabAggregateName, tabInitialState);
 
 // tabAggregate.setCommandHandler(
 //   ({ command, handler, onError = null } = cmdOpenTabHandler)
