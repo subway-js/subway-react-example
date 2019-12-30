@@ -22,6 +22,7 @@ export function RestaurantFloor() {
       next: ({ nextState }) => {
         console.log(" > TAB new state:", nextState);
         const { tables } = nextState;
+        // TODO normalize aggregate state
         setTables(tables);
         simulateOrders(tables);
       }
@@ -34,7 +35,6 @@ export function RestaurantFloor() {
   }, []);
 
   const simulateOrders = tables => {
-    // simulate orders
     tables &&
       tables.forEach(t => {
         // table "open": customer are sitting, waiting to order
@@ -50,7 +50,6 @@ export function RestaurantFloor() {
       next: ({ tableId, drinks }) => {
         drinks.forEach(d => {
           setTimeout(() => {
-            console.log(d);
             TabCommands.serveDrinks(tableId, [d]);
           }, getRandomInt(200, 4000));
         });
@@ -60,7 +59,6 @@ export function RestaurantFloor() {
       next: ({ tableId, food }) => {
         food.forEach(f => {
           setTimeout(() => {
-            console.log(f);
             TabCommands.serveFood(tableId, [f]);
           }, getRandomInt(2000, 4000));
         });

@@ -1,5 +1,6 @@
 import { Events } from "../verbs/events";
 import { Exceptions } from "../verbs/exceptions";
+import * as TabStates from "../globals/tabStates";
 
 export const evtTabOpenedHandler = {
   command: Events.TAB_OPENED,
@@ -9,7 +10,7 @@ export const evtTabOpenedHandler = {
         ...aggregateState,
         tables: aggregateState.tables.map(t => {
           if (t.id === payload.table) {
-            t.status = "open";
+            t.status = TabStates.OPEN;
             t.numberOfPeople = payload.numberOfPeople;
             t.waiter = payload.waiter;
           }
@@ -28,7 +29,7 @@ export const evtDrinksOrderedHandler = {
         ...aggregateState, // TODO no, only partial
         tables: aggregateState.tables.map(t => {
           if (t.id === tableId) {
-            t.status = "waitingOrder";
+            t.status = TabStates.WAITING_ORDER;
             t.outstandingDrinks = drinks;
           }
           return t;
@@ -46,7 +47,7 @@ export const evtFoodOrderedHandler = {
         ...aggregateState, // TODO no, only partial
         tables: aggregateState.tables.map(t => {
           if (t.id === tableId) {
-            t.status = "waitingOrder";
+            t.status = TabStates.WAITING_ORDER;
             t.outstandingFood = food;
           }
           return t;
@@ -85,7 +86,7 @@ export const evtDrinkServeddHandler = {
               nextTable.outstandingFood.length === 0 &&
               nextTable.outstandingDrinks.length === 0
             ) {
-              nextTable.status = "readyToPay";
+              nextTable.status = TabStates.READY_TO_PAY;
               nextTable.tipPercentage = 12;
               nextTable.tip =
                 nextTable.servedItemsValue * (nextTable.tipPercentage / 100);
@@ -132,7 +133,7 @@ export const evtFoodServedHandler = {
               nextTable.outstandingFood.length === 0 &&
               nextTable.outstandingDrinks.length === 0
             ) {
-              nextTable.status = "readyToPay";
+              nextTable.status = TabStates.READY_TO_PAY;
               nextTable.tipPercentage = 12;
               nextTable.tip =
                 nextTable.servedItemsValue * (nextTable.tipPercentage / 100);
@@ -160,7 +161,7 @@ export const evtTabClosedHandler = {
             const emptyTable = {
               id: tableId,
               label: t.label,
-              status: "available"
+              status: TabStates.AVAILABLE
             };
             return emptyTable;
           }

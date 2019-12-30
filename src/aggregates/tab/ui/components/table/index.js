@@ -10,6 +10,8 @@ import {
   Grid
 } from "semantic-ui-react";
 
+import * as TabState from "../../../globals/tabStates";
+
 export function Table({ data, onSitCustomers, onPay }) {
   if (!data) return null;
   return (
@@ -19,7 +21,7 @@ export function Table({ data, onSitCustomers, onPay }) {
           {data.label}
         </Label>
         <Card.Meta>
-          {data.status === "available" ? (
+          {data.status === TabState.AVAILABLE ? (
             "This table is free"
           ) : (
             <span>
@@ -33,7 +35,7 @@ export function Table({ data, onSitCustomers, onPay }) {
         </Card.Meta>
 
         <Card.Description>
-          {data.status === "available" && (
+          {data.status === TabState.AVAILABLE && (
             <div className="ui center aligned">
               <br />
               <Statistic color="grey" size="mini">
@@ -44,14 +46,14 @@ export function Table({ data, onSitCustomers, onPay }) {
               <br />
             </div>
           )}
-          {data.status === "open" && (
+          {data.status === TabState.OPEN && (
             <>
               <br />
               <Loader active inline="centered" />
               <br />
             </>
           )}
-          {data.status === "waitingOrder" && (
+          {data.status === TabState.WAITING_ORDER && (
             <Grid divided="vertically">
               <Grid.Row columns={2}>
                 <Grid.Column>
@@ -88,7 +90,7 @@ export function Table({ data, onSitCustomers, onPay }) {
               </Grid.Row>
             </Grid>
           )}
-          {data.status === "readyToPay" && (
+          {data.status === TabState.READY_TO_PAY && (
             <div className="ui center aligned">
               <br />
               <Statistic color="green" size="tiny">
@@ -106,18 +108,20 @@ export function Table({ data, onSitCustomers, onPay }) {
       </Card.Content>
 
       <Card.Content extra>
-        {data.status === "open" && <p>Customers choosing food & drinks...</p>}
-        {data.status === "available" && (
+        {data.status === TabState.OPEN && (
+          <p>Customers choosing food & drinks...</p>
+        )}
+        {data.status === TabState.AVAILABLE && (
           <div className="ui two buttons">
             <Button basic color="green" onClick={() => onSitCustomers(data)}>
               Sit customers
             </Button>
           </div>
         )}
-        {data.status === "waitingOrder" && (
+        {data.status === TabState.WAITING_ORDER && (
           <p>Cooking and delivering orders...</p>
         )}
-        {data.status === "readyToPay" && (
+        {data.status === TabState.READY_TO_PAY && (
           <div className="ui two buttons">
             <Button color="green" onClick={() => onPay(data)}>
               Pay & free table
