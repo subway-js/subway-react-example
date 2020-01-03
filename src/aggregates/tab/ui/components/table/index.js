@@ -17,7 +17,7 @@ export function Table({ data, onSitCustomers, onPay }) {
   return (
     <Card key={data.id} color="green" style={{ minHeight: 250 }}>
       <Card.Content>
-        <Label as="a" color="green" ribbon>
+        <Label as="span" color="green" ribbon>
           {data.label}
         </Label>
         <Card.Meta>
