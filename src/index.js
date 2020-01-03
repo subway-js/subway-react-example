@@ -9,6 +9,11 @@ import {
 } from "./aggregates/tab";
 
 import {
+  AGGREGATE_NAME as KitchenAggregateName,
+  initialState as kitchenInitialState
+} from "./aggregates/kitchen";
+
+import {
   cmdOpenTabHandler,
   cmdPlaceOrderHandler,
   cmdMarkDrinkServedHandler,
@@ -26,6 +31,11 @@ import {
 } from "./aggregates/tab/handlers/events";
 
 const tabAggregate = Subway.createAggregate(TabAggregateName, tabInitialState);
+
+const kitchenAggregate = Subway.createAggregate(
+  KitchenAggregateName,
+  kitchenInitialState
+);
 
 // tabAggregate.setCommandHandler(
 //   ({ command, handler, onError = null } = cmdOpenTabHandler)
