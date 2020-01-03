@@ -46,21 +46,22 @@ export function RestaurantFloor() {
       });
   };
   const simulateKitchenAndWaiter = aggregate => {
-    aggregate.spy(Events.DRINKS_ORDERED, {
-      next: ({ tableId, drinks }) => {
+    const kitchenAggregate = Subway.selectAggregate("KitchenAggregate");
+    kitchenAggregate.spy("DrinksPrepared", {
+      next: ({ table, drinks }) => {
         drinks.forEach(d => {
           setTimeout(() => {
-            TabCommands.serveDrinks(tableId, [d]);
-          }, getRandomInt(200, 4000));
+            TabCommands.serveDrinks(table, [d]);
+          }, getRandomInt(1000, 2000));
         });
       }
     });
-    aggregate.spy(Events.FOOD_ORDERED, {
-      next: ({ tableId, food }) => {
+    kitchenAggregate.spy("FoodPrepared", {
+      next: ({ table, food }) => {
         food.forEach(f => {
           setTimeout(() => {
-            TabCommands.serveFood(tableId, [f]);
-          }, getRandomInt(2000, 4000));
+            TabCommands.serveFood(table, [f]);
+          }, getRandomInt(1000, 2000));
         });
       }
     });

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Label, Icon, List, Button } from "semantic-ui-react";
+import {
+  Card,
+  Label,
+  Icon,
+  List,
+  Button,
+  Message,
+  Container
+} from "semantic-ui-react";
 
 import { Subway } from "../../../../subwayRef";
 import { AGGREGATE_NAME as KITCHEN_AGGREGATE_NAME } from "../../";
@@ -36,32 +44,60 @@ export function Kitchen() {
     });
     setOrders(currentState.orders);
   }, []);
+
   return (
-    <Card.Group itemsPerRow={3}>
-      {orders &&
-        orders.map(({ table, drinks, food }, i) => (
-          <Card key={i} raised>
-            <Card.Content>
-              <Label as="span" tag color="brown">
-                <Icon key={i} name={drinks ? "glass martini" : "food"} />
-                for table {table}
-              </Label>
-              <List bulleted size="mini">
-                {drinks &&
-                  drinks.map((d, i) => (
-                    <List.Item key={i}>{d.label}</List.Item>
-                  ))}
-                {food &&
-                  food.map((d, i) => <List.Item key={i}>{d.label}</List.Item>)}
-              </List>
-            </Card.Content>
-            <Card.Content extra>
-              <Button size="mini" fluid basic color="brown" onClick={() => {}}>
-                Mark as ready
-              </Button>
-            </Card.Content>
-          </Card>
+    <>
+      {!orders ||
+        (orders.length === 0 && (
+          <Container>
+            <Message color="brown" size="mini" icon>
+              <Icon name="circle notched" loading />
+              <Message.Content>
+                <Message.Header>Waiting</Message.Header>
+                There are no pending orders to fulfill...
+              </Message.Content>
+            </Message>
+          </Container>
         ))}
-    </Card.Group>
+      {orders && (
+        <Card.Group itemsPerRow={3}>
+          {orders.map(({ id, table, drinks, food }, i) => (
+            <Card key={i} raised>
+              <Card.Content>
+                <Label as="span" tag color="brown">
+                  <Icon key={i} name={drinks ? "glass martini" : "food"} />
+                  for table {table}
+                </Label>
+                <List bulleted size="mini">
+                  {drinks &&
+                    drinks.map((d, i) => (
+                      <List.Item key={i}>{d.label}</List.Item>
+                    ))}
+                  {food &&
+                    food.map((d, i) => (
+                      <List.Item key={i}>{d.label}</List.Item>
+                    ))}
+                </List>
+              </Card.Content>
+              <Card.Content extra>
+                <Button
+                  size="mini"
+                  fluid
+                  basic
+                  color="brown"
+                  onClick={() =>
+                    drinks
+                      ? prepareDrink(id, table, drinks)
+                      : prepareFood(id, table, food)
+                  }
+                >
+                  Mark as ready
+                </Button>
+              </Card.Content>
+            </Card>
+          ))}
+        </Card.Group>
+      )}
+    </>
   );
 }

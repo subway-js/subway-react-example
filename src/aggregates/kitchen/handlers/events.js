@@ -23,3 +23,27 @@ export const evtFoodOrderAddeddHandler = {
     };
   }
 };
+
+export const evtDrinksPreparedHandler = {
+  command: Events.DRINKS_PREPARED,
+  handler: (aggregateState, payload) => {
+    return {
+      proposal: {
+        ...aggregateState,
+        orders: aggregateState.orders.filter(o => o.id !== payload.id)
+      }
+    };
+  }
+};
+
+export const evtFoodPreparedHandler = {
+  command: Events.FOOD_PREPARED,
+  handler: (aggregateState, payload) => {
+    return {
+      proposal: {
+        ...aggregateState,
+        orders: aggregateState.orders.filter(o => o.id !== payload.id)
+      }
+    };
+  }
+};

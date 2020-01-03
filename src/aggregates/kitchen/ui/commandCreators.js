@@ -4,7 +4,7 @@ import { Subway } from "../../../subwayRef";
 
 export const addDrinkOrder = (tableId, drinks) => {
   Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.ADD_DRINK_ORDER, {
-    id: 0,
+    id: `D${Date.now()}`,
     table: tableId,
     drinks
   });
@@ -12,23 +12,23 @@ export const addDrinkOrder = (tableId, drinks) => {
 
 export const addFoodOrder = (tableId, food) => {
   Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.ADD_FOOD_ORDER, {
-    id: 0,
+    id: `F${Date.now()}`,
     table: tableId,
     food
   });
 };
 
-export const prepareDrink = (tableId, drink) => {
-  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.PREPARE_DRINK, {
-    id: 0,
+export const prepareDrink = (orderId, tableId, drinks) => {
+  Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.PREPARE_DRINKS, {
+    id: orderId,
     table: tableId,
-    drink
+    drinks
   });
 };
 
-export const prepareFood = (tableId, food) => {
+export const prepareFood = (orderId, tableId, food) => {
   Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.PREPARE_FOOD, {
-    id: 0,
+    id: orderId,
     table: tableId,
     food
   });

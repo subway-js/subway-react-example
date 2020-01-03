@@ -22,8 +22,10 @@ import {
 } from "./aggregates/tab/handlers/commands";
 
 import {
-  cmdAddDrinkOrder,
-  cmdAddFoodOrder
+  cmdAddDrinkOrderHandler,
+  cmdAddFoodOrderHandler,
+  cmdPrepareDrinksHandler,
+  cmdPrepareFoodHandler
 } from "./aggregates/kitchen/handlers/commands";
 
 import {
@@ -37,7 +39,9 @@ import {
 
 import {
   evtDrinksOrderAddeddHandler,
-  evtFoodOrderAddeddHandler
+  evtFoodOrderAddeddHandler,
+  evtDrinksPreparedHandler,
+  evtFoodPreparedHandler
 } from "./aggregates/kitchen/handlers/events";
 
 const tabAggregate = Subway.createAggregate(TabAggregateName, tabInitialState);
@@ -56,8 +60,10 @@ tabAggregate.setCommandHandler(...Object.values(cmdMarkDrinkServedHandler));
 tabAggregate.setCommandHandler(...Object.values(cmdMarkFoodServedHandler));
 tabAggregate.setCommandHandler(...Object.values(cmdCloseTabHandler));
 
-kitchenAggregate.setCommandHandler(...Object.values(cmdAddDrinkOrder));
-kitchenAggregate.setCommandHandler(...Object.values(cmdAddFoodOrder));
+kitchenAggregate.setCommandHandler(...Object.values(cmdAddDrinkOrderHandler));
+kitchenAggregate.setCommandHandler(...Object.values(cmdAddFoodOrderHandler));
+kitchenAggregate.setCommandHandler(...Object.values(cmdPrepareDrinksHandler));
+kitchenAggregate.setCommandHandler(...Object.values(cmdPrepareFoodHandler));
 // tabCmdHandlers.forEach(({ command, handler, onError = null }) => {
 //   tabAggregate.setCommandHandler(command, handler, onError);
 // });
@@ -71,6 +77,8 @@ tabAggregate.setEventHandler(...Object.values(evtTabClosedHandler));
 
 kitchenAggregate.setEventHandler(...Object.values(evtDrinksOrderAddeddHandler));
 kitchenAggregate.setEventHandler(...Object.values(evtFoodOrderAddeddHandler));
+kitchenAggregate.setEventHandler(...Object.values(evtDrinksPreparedHandler));
+kitchenAggregate.setEventHandler(...Object.values(evtFoodPreparedHandler));
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
