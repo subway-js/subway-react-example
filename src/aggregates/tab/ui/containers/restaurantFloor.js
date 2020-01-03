@@ -75,7 +75,7 @@ export function RestaurantFloor() {
   };
 
   return (
-    <Card.Group itemsPerRow={2}>
+    <Card.Group itemsPerRow={3}>
       {tables &&
         tables.map(t => (
           <Table
