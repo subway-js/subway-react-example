@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card } from "semantic-ui-react";
 
 import { Subway } from "../../../../subwayRef";
-import { Events } from "../../verbs/events";
 import {
   getRandomInt,
   getRandomOrder,

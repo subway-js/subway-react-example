@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  Label,
-  Icon,
-  List,
-  Button,
-  Message,
-  Container
-} from "semantic-ui-react";
+import { Card, Icon, Message, Container } from "semantic-ui-react";
 
 import { Subway } from "../../../../subwayRef";
 import { AGGREGATE_NAME as KITCHEN_AGGREGATE_NAME } from "../../";
@@ -18,6 +10,8 @@ import {
   prepareDrink,
   prepareFood
 } from "../commandCreators";
+
+import { Order } from "../components/order";
 
 export function Kitchen() {
   const [orders, setOrders] = useState(null);
@@ -45,6 +39,10 @@ export function Kitchen() {
     setOrders(currentState.orders);
   }, []);
 
+  const markOrderAsReady = (orderId, tableId, drinks, food) => {
+    drinks && prepareDrink(orderId, tableId, drinks);
+    food && prepareFood(orderId, tableId, food);
+  };
   return (
     <>
       {!orders ||
@@ -62,39 +60,14 @@ export function Kitchen() {
       {orders && (
         <Card.Group itemsPerRow={3}>
           {orders.map(({ id, table, drinks, food }, i) => (
-            <Card key={i} raised>
-              <Card.Content>
-                <Label as="span" tag color="brown">
-                  <Icon key={i} name={drinks ? "glass martini" : "food"} />
-                  for table {table}
-                </Label>
-                <List bulleted size="mini">
-                  {drinks &&
-                    drinks.map((d, i) => (
-                      <List.Item key={i}>{d.label}</List.Item>
-                    ))}
-                  {food &&
-                    food.map((d, i) => (
-                      <List.Item key={i}>{d.label}</List.Item>
-                    ))}
-                </List>
-              </Card.Content>
-              <Card.Content extra>
-                <Button
-                  size="mini"
-                  fluid
-                  basic
-                  color="brown"
-                  onClick={() =>
-                    drinks
-                      ? prepareDrink(id, table, drinks)
-                      : prepareFood(id, table, food)
-                  }
-                >
-                  Mark as ready
-                </Button>
-              </Card.Content>
-            </Card>
+            <Order
+              key={i}
+              orderId={id}
+              tableId={table}
+              drinks={drinks}
+              food={food}
+              onOrderReady={markOrderAsReady}
+            />
           ))}
         </Card.Group>
       )}
