@@ -24,7 +24,6 @@ export function RestaurantFloor() {
         const { tables } = nextState;
         // TODO normalize aggregate state
         setTables(tables);
-        simulateOrders(tables);
       }
     });
     console.log(" > TAB initial state:", currentState);
@@ -39,9 +38,7 @@ export function RestaurantFloor() {
       tables.forEach(t => {
         // table "open": customer are sitting, waiting to order
         if (t.status === "open") {
-          setTimeout(() => {
-            TabCommands.placeOrder(t.id, getRandomOrder(t.numberOfPeople));
-          }, 1000);
+          TabCommands.placeOrder(t.id, getRandomOrder(t.numberOfPeople));
         }
       });
   };
@@ -69,6 +66,7 @@ export function RestaurantFloor() {
 
   const simulateCustomers = ({ id }) => {
     TabCommands.openTab(id, getRandomNumberOfCustomers(), 1);
+    setTimeout(() => simulateOrders(tables), 1000);
   };
 
   const payWithTip = table => {
