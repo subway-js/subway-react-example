@@ -1,39 +1,22 @@
 import React from "react";
-import { Container, Tab } from "semantic-ui-react";
+import { Container, Header } from "semantic-ui-react";
 
 import { RestaurantFloor } from "./aggregates/tab";
 import { Kitchen } from "./aggregates/kitchen";
 
 function App() {
-  const upperPanes = [
-    {
-      menuItem: "Tables",
-      render: () => <RestaurantFloor />
-    }
-  ];
-
-  const lowerPanes = [
-    {
-      menuItem: "Kitchen",
-      render: () => <Kitchen />
-    }
-  ];
-
   return (
     <Container>
-      <Tab
-        menu={{ secondary: true, pointing: true, color: "green" }}
-        panes={upperPanes}
-      />
       <br />
-      <Tab
-        menu={{
-          secondary: true,
-          pointing: true,
-          color: "brown"
-        }}
-        panes={lowerPanes}
-      />
+      <Header color="green" as="h4" dividing>
+        Tables
+      </Header>
+      <RestaurantFloor />
+
+      <Header color="brown" as="h4" dividing>
+        Kitchen
+      </Header>
+      <Kitchen />
     </Container>
   );
 }
