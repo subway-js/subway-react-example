@@ -45,7 +45,7 @@ export const serveDrinks = (tableId, drinks) => {
 
 export const payAndFreeTable = table => {
   Subway.selectAggregate(AGGREGATE_NAME).sendCommand(Commands.CLOSE_TAB, {
-    id: 0,
+    id: `BILL_${Date.now()}`,
     table
   });
 };

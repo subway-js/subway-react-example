@@ -3,6 +3,7 @@ import { Container, Header } from "semantic-ui-react";
 
 import { RestaurantFloor } from "./aggregates/tab";
 import { Kitchen } from "./aggregates/kitchen";
+import { BillingTable } from "./aggregates/billing";
 
 function App() {
   return (
@@ -17,6 +18,11 @@ function App() {
         Kitchen
       </Header>
       <Kitchen />
+
+      <Header color="blue" as="h4" dividing>
+        Billing
+      </Header>
+      <BillingTable />
     </Container>
   );
 }

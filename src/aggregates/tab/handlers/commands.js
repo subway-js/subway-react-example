@@ -63,14 +63,22 @@ export const cmdMarkFoodServedHandler = {
 
 export const cmdCloseTabHandler = {
   command: Commands.CLOSE_TAB,
-  handler: (aggregateState, { table }) => {
-    const { id, servedItemsValue, tipPercentage, tip, bill, waiter } = table;
+  handler: (aggregateState, payload) => {
+    const {
+      id,
+      servedItemsValue,
+      tipPercentage,
+      tip,
+      bill,
+      waiter
+    } = payload.table;
+
     return {
       events: [
         {
           id: Events.TAB_CLOSED,
           payload: {
-            id: 0,
+            id: payload.id,
             tableId: id,
             amountPaid: bill,
             orderValue: servedItemsValue,
