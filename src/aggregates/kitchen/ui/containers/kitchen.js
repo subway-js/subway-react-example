@@ -16,27 +16,37 @@ import { Order } from "../components/order";
 export function Kitchen() {
   const [orders, setOrders] = useState(null);
   useEffect(() => {
-    Subway.selectAggregate("TabAggregate").spy("DrinksOrdered", {
-      next: ({ tableId, drinks }) => {
-        addDrinkOrder(tableId, drinks);
+    const unSpyDrinks = Subway.selectAggregate("TabAggregate").spy(
+      "DrinksOrdered",
+      {
+        next: ({ tableId, drinks }) => {
+          addDrinkOrder(tableId, drinks);
+        }
       }
-    });
+    );
 
-    Subway.selectAggregate("TabAggregate").spy("FoodOrdered", {
-      next: ({ tableId, food }) => {
-        addFoodOrder(tableId, food);
+    const unSpyFood = Subway.selectAggregate("TabAggregate").spy(
+      "FoodOrdered",
+      {
+        next: ({ tableId, food }) => {
+          addFoodOrder(tableId, food);
+        }
       }
-    });
+    );
 
     const kitchenAggregate = Subway.selectAggregate(KITCHEN_AGGREGATE_NAME);
     const { currentState } = kitchenAggregate.observeState({
       next: ({ nextState }) => {
         const { orders } = nextState;
-        console.log("------------------", orders);
         setOrders(orders);
       }
     });
     setOrders(currentState.orders);
+
+    return () => {
+      unSpyDrinks();
+      unSpyFood();
+    };
   }, []);
 
   const markOrderAsReady = (orderId, tableId, drinks, food) => {
